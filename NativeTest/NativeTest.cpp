@@ -29,7 +29,9 @@ JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testByteString(JNIEn
 	printf("Java_com_vteba_test_NativeTest_testByteString\r\n");
 	// c++ string 类，可以通过函数c_str()转成char*
 	const char* cstr = str.c_str();
-	// jstring jsresult = env->NewStringUTF(cstr);
+
+	// 转换成jstring，也就是java的string
+	//jstring jsresult = env->NewStringUTF(cstr);
 
 	// char* 也可以直接强转成jbyte* 因为char是8位int不会越界
 	jbyte* middleByteArray = (jbyte*)cstr;
@@ -53,11 +55,11 @@ JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testByteString(JNIEn
 */
 JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testBytes(JNIEnv *env, jclass jc, jbyteArray jbyteArrayInput) {
 	printf("Java_com_vteba_test_NativeTest_testBytes\n");
-
+	// 获得数组长度
 	jsize theArrayLeng = env->GetArrayLength(jbyteArrayInput);
-
+	// 获得数组元素，这个是一个指针，后面需要释放
 	jbyte * jbyteArrayData = env->GetByteArrayElements(jbyteArrayInput, JNI_FALSE);
-
+	// 可以直接强转位char*数组（这个就是C++的字节数组）
 	char * jbyteArrayString = (char *)jbyteArrayData;
 	printf("C++ OUTPUT %s\n", jbyteArrayString);
 
