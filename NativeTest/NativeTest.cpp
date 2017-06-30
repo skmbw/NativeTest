@@ -63,9 +63,17 @@ JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testBytes(JNIEnv *en
 	char * jbyteArrayString = (char *)jbyteArrayData;
 	printf("C++ OUTPUT %s\n", jbyteArrayString);
 
+	jbyteArray resultBytes = env->NewByteArray(theArrayLeng);
+
+	env->SetByteArrayRegion(resultBytes, 0, theArrayLeng, jbyteArrayData);
+
+	/*for (long i = 0; i < theArrayLeng; i++) {
+		resultBytes[i] = (jbyte)jbyteArrayString[i];
+	}*/
+
 	env->ReleaseByteArrayElements(jbyteArrayInput, jbyteArrayData, 0);
 
-	return jbyteArrayInput;
+	return resultBytes;
 }
 
 /*
