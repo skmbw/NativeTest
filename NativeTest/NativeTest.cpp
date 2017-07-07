@@ -3,8 +3,13 @@
 
 #include "NativeTest.h"
 #include <iostream>
+#include <opencv2\opencv.hpp>
+#include <vector>
+
 
 using namespace std;
+using namespace cv;
+
 
 /*
 * Class:     com_vteba_test_NativeTest
@@ -57,11 +62,25 @@ JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testBytes(JNIEnv *en
 	printf("Java_com_vteba_test_NativeTest_testBytes\n");
 	// 获得数组长度
 	jsize theArrayLeng = env->GetArrayLength(jbyteArrayInput);
+	cout << "the length of input array=[" << theArrayLeng << endl;
 	// 获得数组元素，这个是一个指针，后面需要释放
-	jbyte * jbyteArrayData = env->GetByteArrayElements(jbyteArrayInput, JNI_FALSE);
-	// 可以直接强转位char*数组（这个就是C++的字节数组）
-	char * jbyteArrayString = (char *)jbyteArrayData;
-	printf("C++ OUTPUT %s\n", jbyteArrayString);
+	jbyte *jbyteArrayData = env->GetByteArrayElements(jbyteArrayInput, JNI_FALSE);
+	vector<char> imageData(jbyteArrayData, &jbyteArrayData[theArrayLeng]);
+	// 和上面直接赋值等价
+	//for (auto i = 0; i != theArrayLeng; i++) {
+	//	imageData.push_back(jbyteArrayData[i]);
+	//}
+	cout << "the length of imageData=[" << theArrayLeng << endl;
+	// 可以直接强转为char*数组（这个就是C++的字节数组）
+	//const char *jbyteArrayString = (const char *)jbyteArrayData;
+	//cout << "C++将 [*jbyteArrayData 转 const char *]SUCCESS" << endl;
+	//string strTemp = jbyteArrayString;
+	//cout << "C++将 [const char * 转string]SUCCESS " << strTemp.length() << endl;
+	
+	//std::vector<char> data(strTemp.begin(), strTemp.end());
+	Mat img = imdecode(imageData, cv::IMREAD_GRAYSCALE);
+	bool r = imwrite("E:\\images\\zjt2.jpg", img);
+	printf("cv imwrite result %d\n", r);
 
 	jbyteArray resultBytes = env->NewByteArray(theArrayLeng);
 
