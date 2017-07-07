@@ -1,6 +1,6 @@
 // NativeTest.cpp : Defines the exported functions for the DLL application.
 //
-
+#pragma execution_character_set("utf-8")
 #include "NativeTest.h"
 #include <iostream>
 #include <opencv2\opencv.hpp>
@@ -28,20 +28,20 @@ JNIEXPORT jstring JNICALL Java_com_vteba_test_NativeTest_testString(JNIEnv *env,
 */
 JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testByteString(JNIEnv *env, jclass jc, jstring js) {
 	const char * cs = env->GetStringUTFChars(js, JNI_FALSE);
-	// char* »òÕßchar[]Êı×é ¿ÉÒÔÖ±½Ó×ª»»³Éc++ stringÀà
+	// char* æˆ–è€…char[]æ•°ç»„ å¯ä»¥ç›´æ¥è½¬æ¢æˆc++ stringç±»
 	string str = cs;
 	printf("C++ OUTPUT %s \n", cs);
 	printf("Java_com_vteba_test_NativeTest_testByteString\r\n");
-	// c++ string Àà£¬¿ÉÒÔÍ¨¹ıº¯Êıc_str()×ª³Échar*
+	// c++ string ç±»ï¼Œå¯ä»¥é€šè¿‡å‡½æ•°c_str()è½¬æˆchar*
 	const char* cstr = str.c_str();
 
-	// ×ª»»³Éjstring£¬Ò²¾ÍÊÇjavaµÄstring
+	// è½¬æ¢æˆjstringï¼Œä¹Ÿå°±æ˜¯javaçš„string
 	//jstring jsresult = env->NewStringUTF(cstr);
 
-	// char* Ò²¿ÉÒÔÖ±½ÓÇ¿×ª³Éjbyte* ÒòÎªcharÊÇ8Î»int²»»áÔ½½ç
+	// char* ä¹Ÿå¯ä»¥ç›´æ¥å¼ºè½¬æˆjbyte* å› ä¸ºcharæ˜¯8ä½intä¸ä¼šè¶Šç•Œ
 	jbyte* middleByteArray = (jbyte*)cstr;
 
-	// UTF8×Ö·ûµÄ³¤¶ÈÆäÊµ¾ÍÊÇchar*µÄ³¤¶È£¬Ò²¾ÍÊÇjbyte*µÄ³¤¶È
+	// UTF8å­—ç¬¦çš„é•¿åº¦å…¶å®å°±æ˜¯char*çš„é•¿åº¦ï¼Œä¹Ÿå°±æ˜¯jbyte*çš„é•¿åº¦
 	jsize jlen = env->GetStringUTFLength(js);
 	
 	jbyteArray jbArrayResult = env->NewByteArray(jlen);
@@ -60,22 +60,22 @@ JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testByteString(JNIEn
 */
 JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testBytes(JNIEnv *env, jclass jc, jbyteArray jbyteArrayInput) {
 	printf("Java_com_vteba_test_NativeTest_testBytes\n");
-	// »ñµÃÊı×é³¤¶È
+	// è·å¾—æ•°ç»„é•¿åº¦
 	jsize theArrayLeng = env->GetArrayLength(jbyteArrayInput);
 	cout << "the length of input array=[" << theArrayLeng << endl;
-	// »ñµÃÊı×éÔªËØ£¬Õâ¸öÊÇÒ»¸öÖ¸Õë£¬ºóÃæĞèÒªÊÍ·Å
+	// è·å¾—æ•°ç»„å…ƒç´ ï¼Œè¿™ä¸ªæ˜¯ä¸€ä¸ªæŒ‡é’ˆï¼Œåé¢éœ€è¦é‡Šæ”¾
 	jbyte *jbyteArrayData = env->GetByteArrayElements(jbyteArrayInput, JNI_FALSE);
 	vector<char> imageData(jbyteArrayData, &jbyteArrayData[theArrayLeng]);
-	// ºÍÉÏÃæÖ±½Ó¸³ÖµµÈ¼Û
+	// å’Œä¸Šé¢ç›´æ¥èµ‹å€¼ç­‰ä»·
 	//for (auto i = 0; i != theArrayLeng; i++) {
 	//	imageData.push_back(jbyteArrayData[i]);
 	//}
 	cout << "the length of imageData=[" << theArrayLeng << endl;
-	// ¿ÉÒÔÖ±½ÓÇ¿×ªÎªchar*Êı×é£¨Õâ¸ö¾ÍÊÇC++µÄ×Ö½ÚÊı×é£©
+	// å¯ä»¥ç›´æ¥å¼ºè½¬ä¸ºchar*æ•°ç»„ï¼ˆè¿™ä¸ªå°±æ˜¯C++çš„å­—èŠ‚æ•°ç»„ï¼‰
 	//const char *jbyteArrayString = (const char *)jbyteArrayData;
-	//cout << "C++½« [*jbyteArrayData ×ª const char *]SUCCESS" << endl;
+	//cout << "C++å°† [*jbyteArrayData è½¬ const char *]SUCCESS" << endl;
 	//string strTemp = jbyteArrayString;
-	//cout << "C++½« [const char * ×ªstring]SUCCESS " << strTemp.length() << endl;
+	//cout << "C++å°† [const char * è½¬string]SUCCESS " << strTemp.length() << endl;
 	
 	//std::vector<char> data(strTemp.begin(), strTemp.end());
 	Mat img = imdecode(imageData, cv::IMREAD_GRAYSCALE);
@@ -91,8 +91,18 @@ JNIEXPORT jbyteArray JNICALL Java_com_vteba_test_NativeTest_testBytes(JNIEnv *en
 	}*/
 
 	env->ReleaseByteArrayElements(jbyteArrayInput, jbyteArrayData, 0);
+	// å¸¸é‡ä¸­æœ‰æ¢è¡Œç¬¦ï¼ˆè§£å†³åŠæ³•ï¼‰
+	//ï¼ˆ1ï¼‰å…¨éƒ¨ç”¨è‹±æ–‡ç¼–ç ï¼Œä¸è¦ç”¨ä¸­æ–‡
+	//ï¼ˆ2ï¼‰å¶æ•°ä¸­æ–‡ æˆ– ç»“å°¾åŠ è‹±æ–‡çš„ç¬¦å·ï¼Œå¦‚"."
+	//ï¼ˆ3ï¼‰å°†æ–‡ä»¶ç¼–ç è¿›è¡Œä¸€ä¸ªæ‰‹åŠ¨ï¼ˆå¦‚è®°äº‹æœ¬ï¼‰è½¬æ¢ï¼Œæ”¹æˆUTF - 8æ ¼å¼
+	string ret = "wojiao125#$aå°¹é›·å•Šaa.";
+	const char *c_ret = ret.c_str();
+	const jbyte *j_ret = (const jbyte *)c_ret;
+	auto len = ret.length();
+	jbyteArray ret_jbyteArray = env->NewByteArray(len);
+	env->SetByteArrayRegion(ret_jbyteArray, 0, len, j_ret);
 
-	return resultBytes;
+	return ret_jbyteArray;
 }
 
 /*
@@ -106,8 +116,8 @@ JNIEXPORT jint JNICALL Java_com_vteba_test_NativeTest_testInteger(JNIEnv *env, j
 }
 
 /*
-* ½«char*×ª³Éjstring
-* @param env jni»·¾³
+* å°†char*è½¬æˆjstring
+* @param env jniç¯å¢ƒ
 * @param 
 */
 jstring charToJstring(JNIEnv* env, const char* pat) {
@@ -119,7 +129,7 @@ jstring charToJstring(JNIEnv* env, const char* pat) {
 	return (jstring)env->NewObject(strClass, ctorID, bytes, encoding);
 }
 
-//½«jstringÀàĞÍ×ª»»³Échar*
+//å°†jstringç±»å‹è½¬æ¢æˆchar*
 char* jstringToChar(JNIEnv* env, jstring jstr) {
 	char* rtn = NULL;
 	jclass clsstring = env->FindClass("java/lang/String");
@@ -131,7 +141,7 @@ char* jstringToChar(JNIEnv* env, jstring jstr) {
 	if (alen > 0) {
 		rtn = (char*)malloc(alen + 1);
 		memcpy(rtn, ba, alen);
-		rtn[alen] = 0; // ¶àÒ»Î»¸³Öµ0£¬ÊÇ½áÊø±êÖ¾Âğ
+		rtn[alen] = 0; // å¤šä¸€ä½èµ‹å€¼0ï¼Œæ˜¯ç»“æŸæ ‡å¿—å—
 	}
 	env->ReleaseByteArrayElements(barr, ba, 0);
 	
